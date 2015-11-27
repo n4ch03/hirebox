@@ -1,5 +1,5 @@
 var request = require('request-promise');
-
+var token;
 module.exports =
     function (context, cb) {
       if (context.data.SLACK_COMMAND_TOKEN !==context.data.token) {
@@ -9,18 +9,17 @@ module.exports =
       var userAndDomain;
       var channelName;
       var channelId;
-      var token;
       var channelBase;
 
       token = context.data.SLACK_TOKEN;
-      channelBase = context.data.SLACK_CHANNEL_NAME || exercise;
 
+      channelBase = context.data.SLACK_CHANNEL_NAME || "exercise";
       userAndDomain = context.data.text.split('@');
 
       //really simple mail validation, others deegated to Slack API
       if (userAndDomain.length <= 1) {
         cb(null, "Please provide a valid email");
-      } else if (token === 'undefined') {
+      } else if (token === undefined) {
         cb(null, "Sorry the token in you webhook isn't valid");
       } else {
         mail = context.data.text;
@@ -36,7 +35,6 @@ module.exports =
             }).then(function(json) {
               inviteUserToChannel(context.data.user_id, channelId);
             }).then(function(json) {
-              console.log(json);
               cb(null, "Channel And User Created");
             })
             .catch(function(err) {
@@ -62,20 +60,6 @@ module.exports =
 
     }
 
-function feedbackMessage(message, channelId) {
-  return request({
-    json: true,
-    method: 'POST',
-    url: 'https://n4ch03.slack.com/api/chat.postMessage',
-    qs: {
-      "token": "xoxp-15400240608-15395415013-15409120775-7e95fad705",
-      "channel": channelId,
-      "username": 'Josesito',
-      "text": message
-     },
-    });
-}
-
 function createChannel(channelName) {
   return request({
     json: true,
@@ -84,7 +68,7 @@ function createChannel(channelName) {
     qs: {
       "name": channelName,
       "in_background": false,
-      "token": "xoxp-15400240608-15395415013-15409120775-7e95fad705",
+      "token": token,
       "_attempts": 1
     }
   });
@@ -99,7 +83,7 @@ function inviteUser(email, channel) {
     qs: {
       "email": email,
       "ultra_restricted": 1,
-      "token": "xoxp-15400240608-15395415013-15409120775-7e95fad705",
+      "token": token,
       "set_active": true,
       "_attempts": 1,
       "channels": channel
@@ -113,7 +97,7 @@ function inviteUserToChannel(userId, channelId) {
     method: 'POST',
     url: 'https://n4ch03.slack.com/api/channels.invite',
     qs: {
-      "token": "xoxp-15400240608-15395415013-15409120775-7e95fad705",
+      "token": token,
       "channel": channelId,
       "user": userId
     }

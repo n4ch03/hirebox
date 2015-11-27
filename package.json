@@ -1,0 +1,25 @@
+{
+  "name": "hirebox",
+  "version": "0.0.1",
+  "description": "A slack integration that builds a sandbox to work with candidates",
+  "main": "web-tasks/hirebox-wt.js",
+  "scripts": {
+    "test": "mocha web-tasks/hirebox-wt-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n4ch03/hirebox.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/n4ch03/hirebox/issues"
+  },
+  "homepage": "https://github.com/n4ch03/hirebox",
+  "devDependencies": {
+    "bluebird": "^3.0.5",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "mock-require": "^1.2.1"
+  }
+}
