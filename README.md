@@ -40,7 +40,7 @@ The idea is to setup a integration that when you type a command **x** with param
 
 Once repo is cloned execute:
 ```
-wt create app.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME
+wt create web-tasks/hirebox-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN
 ```
 The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 

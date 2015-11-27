@@ -2,6 +2,9 @@ var request = require('request-promise');
 
 module.exports =
     function (context, cb) {
+      if (context.data.SLACK_COMMAND_TOKEN !==context.data.token) {
+        return cb(null, "You need to provide the security token when deploy integration webtask");
+      }
       var mail;
       var userAndDomain;
       var channelName;
