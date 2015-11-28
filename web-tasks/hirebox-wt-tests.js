@@ -42,7 +42,8 @@ describe('Invite External User Without Channel Creation', function() {
         "SLACK_CHANNEL_NAME": "PEPITO",
         "text": "hihihihi.com",
         "test_username": "hihihihi.com",
-        "test_email": "hihihihi.com"
+        "test_email": "hihihihi.com",
+        "SLACK_DOMAIN": 'n4ch03'
       }
     };
     wt(oracle, function (error, body){
@@ -86,7 +87,8 @@ describe('Invite External User and Creates Channel', function() {
         "SLACK_CHANNEL_NAME": "PEPITO",
         "text": "+hihihihi.com",
         "test_username": "hihihihi.com",
-        "test_email": "hihihihi.com"
+        "test_email": "hihihihi.com",
+        "SLACK_DOMAIN": 'n4ch03'
       }
     };
     wt(oracle, function (error, body){
@@ -114,7 +116,8 @@ describe('Generic Errors', function() {
         "SLACK_CHANNEL_NAME": "PEPITO",
         "text": "iesmite@gmail.com",
         "test_username": "iesmite",
-        "test_email": "iesmite@gmail.com"
+        "test_email": "iesmite@gmail.com",
+        "SLACK_DOMAIN": 'n4ch03'
       }
     };
     wt(oracle, function (error, body){
@@ -136,6 +139,12 @@ describe('Generic Errors', function() {
     oracle.data.test_email = "iesmite@gmail.com";
     wt(oracle, function (error, body){
       body.should.be.equal("Channel And User Created");
+    });
+  });
+  it('No SLACK_DOMAIN setted', function() {
+    delete oracle.data.SLACK_DOMAIN;
+    wt(oracle, function (error, body){
+      body.should.be.equal("Your command wasn't configured properly, please provide your slack domain in SLACK_DOMAIN to webtask");
     });
   });
 });

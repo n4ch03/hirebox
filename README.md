@@ -47,7 +47,7 @@ npm test
 
 Once repo is cloned execute:
 ```
-wt create web-tasks/hirebox-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN
+wt create web-tasks/hirebox-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=n4ch03
 ```
 The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 
@@ -57,3 +57,7 @@ The token need for this integration is a token issued to an organization admin. 
 ![](https://dl.dropboxusercontent.com/u/3835331/hirebox-slack.gif)
 
 That's all!! Just type your command and an email or your command and +email and the boring task of creating channels and invite externals users will not be there ;)
+
+## TODO
+* Decide if kick out admin from new generated channel
+* Move to express and/or decide how to improve validations (middleware?)

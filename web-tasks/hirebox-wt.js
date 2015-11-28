@@ -1,9 +1,14 @@
 var request = require('request-promise');
 var token;
+var domain;
+
 module.exports =
     function (context, cb) {
       if (context.data.SLACK_COMMAND_TOKEN !==context.data.token) {
         return cb(null, "You need to provide the security token when deploy integration webtask");
+      }
+      if (context.data.SLACK_DOMAIN === undefined) {
+        return cb(null, "Your command wasn't configured properly, please provide your slack domain in SLACK_DOMAIN to webtask")
       }
       var mail;
       var userAndDomain;
@@ -12,9 +17,9 @@ module.exports =
       var channelBase;
 
       token = context.data.SLACK_TOKEN;
-
       channelBase = context.data.SLACK_CHANNEL_NAME || "exercise";
       userAndDomain = context.data.text.split('@');
+      domain = context.data.SLACK_DOMAIN;
 
       //really simple mail validation, others deegated to Slack API
       if (userAndDomain.length <= 1) {
@@ -64,7 +69,7 @@ function createChannel(channelName) {
   return request({
     json: true,
     method: 'POST',
-    url: 'https://n4ch03.slack.com/api/channels.join',
+    url: 'https://' + domain + '.slack.com/api/channels.join',
     qs: {
       "name": channelName,
       "in_background": false,
@@ -79,7 +84,7 @@ function inviteUser(email, channel) {
   return request({
     json: true,
     method: 'POST',
-    url: 'https://n4ch03.slack.com/api/users.admin.invite',
+    url: 'https://' + domain + '.slack.com/api/users.admin.invite',
     qs: {
       "email": email,
       "ultra_restricted": 1,
@@ -95,7 +100,7 @@ function inviteUserToChannel(userId, channelId) {
   return request({
     json: true,
     method: 'POST',
-    url: 'https://n4ch03.slack.com/api/channels.invite',
+    url: 'https://' + domain + '.slack.com/api/channels.invite',
     qs: {
       "token": token,
       "channel": channelId,
