@@ -47,7 +47,7 @@ npm test
 
 Once repo is cloned execute:
 ```
-wt create web-tasks/hirebox-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=n4ch03
+wt create web-tasks/hirebox-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=YOUR_SLACK_ORGANIZATION_DOMAIN
 ```
 The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 
