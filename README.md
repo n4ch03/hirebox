@@ -1,4 +1,4 @@
-# hirebox: A slack integration that builds a sandbox to work with candidates
+# hirebox: A slack integration that builds a sandbox to work with candidates.
 ![](https://api.travis-ci.org/n4ch03/hirebox.svg?branch=master)
 
 ## Motivation
