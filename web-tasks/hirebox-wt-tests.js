@@ -1,5 +1,3 @@
-var sucks = {"message": "1"}
-
 var chai = require('chai');
 var bluebird = require('bluebird');
 chai.should();
