@@ -54,7 +54,7 @@ The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 The token need for this integration is a token issued to an organization admin. To get that token, login as an administrator an go to https://api.slack.com/web .
 
 ### Set up slack integration
-![](https://dl.dropboxusercontent.com/u/3835331/hirebox-slack.gif)
+![](https://dl.dropboxusercontent.com/u/3835331/invite-guest-slack-command.gif)
 
 That's all!! Just type your command and an email or your command and +email and the boring task of creating channels and invite externals users will not be there ;)
 
