@@ -5,42 +5,22 @@ var data;
 var mock = require('mock-require');
 var oracle;
 mock('request-promise', function (options) {
-    var url = options.url;
-    if (url.indexOf("channels.join") !== -1) {
-      //CREATE CHANNEL
-      options.qs.should.have.property("name",oracle.data.test_username + "-" + (oracle.data.SLACK_CHANNEL_NAME || "exercise"));
-      return bluebird.resolve({channel: {id: "TEST_CHANNEL_ID"}})
-    } else if (url.indexOf("users.admin.invite") !== -1) {
-      //INVITE EXTERNAL
-      options.qs.email.should.be.a("string");
-      options.qs.should.have.property("email", oracle.data.test_email);
-      options.qs.should.have.property("set_active",true);
-      options.qs.should.have.property("channels", oracle.data.channel_id);
-      return bluebird.resolve({})
-    } else if (url.indexOf("channels.invite") !== -1) {
-      // INVITE CHANNEL
-      options.qs.should.have.property("channel", oracle.data.channel_id);
-      options.qs.should.have.property("user", oracle.data.user_id);
-      return bluebird.resolve({})
-    }
-
-
+    //INVITE EXTERNAL
+    options.qs.email.should.be.a("string");
+    options.qs.should.have.property("email", oracle.data.test_email);
+    options.qs.should.have.property("set_active",true);
+    options.qs.should.have.property("channels", oracle.data.channel_id);
+    return bluebird.resolve(oracle.data.result);
 });
 var wt = require(__dirname + '/slack-invite-guest-command-wt.js');
-describe('Invite External User Without Channel Creation', function() {
-  it('No @', function() {
+describe('Invite External User', function() {
+  it('No @ in email', function() {
     oracle = {
       data: {
-        "SLACK_TOKEN": "A",
-        "SLACK_COMMAND_TOKEN": "B",
-        "token": "B",
-        "user_id": "USERID",
-        "channel_name": "CHANNEL",
-        "channel_id": "THE_CHANNEL_ID",
-        "SLACK_CHANNEL_NAME": "PEPITO",
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
         "text": "hihihihi.com",
-        "test_username": "hihihihi.com",
-        "test_email": "hihihihi.com",
         "SLACK_DOMAIN": 'n4ch03'
       }
     };
@@ -48,101 +28,143 @@ describe('Invite External User Without Channel Creation', function() {
       body.should.be.equal("Please provide a valid email");
     });
   });
-  it('Valid Email and From Channel', function() {
-    oracle.data.text = "iesmite@gmail.com";
-    oracle.data.test_username = "iesmite";
-    oracle.data.test_email = "iesmite@gmail.com";
-    wt(oracle, function (error, body){
-      body.should.be.equal("User created and invited to channel");
-    });
-  });
-
-  it('Valid Email and From Private Group', function() {
-    oracle.data.channel_name = "privategroup";
-    wt(oracle, function (error, body){
-      body.should.be.equal("You need to be in a channel to invite an external user");
-    });
-  });
-
-  it('Valid Email and From Direct Message', function() {
-    oracle.data.channel_name = "directmessage";
-    wt(oracle, function (error, body){
-      body.should.be.equal("You need to be in a channel to invite an external user");
-    });
-  });
-});
-
-describe('Invite External User and Creates Channel', function() {
-  it('No @', function() {
+  it('Valid Email Address', function() {
     oracle = {
       data: {
-        "SLACK_TOKEN": "A",
-        "SLACK_COMMAND_TOKEN": "B",
-        "token": "B",
-        "user_id": "USERID",
-        "channel_name": "CHANNEL",
-        "channel_id": "TEST_CHANNEL_ID",
-        "SLACK_CHANNEL_NAME": "PEPITO",
-        "text": "+hihihihi.com",
-        "test_username": "hihihihi.com",
-        "test_email": "hihihihi.com",
-        "SLACK_DOMAIN": 'n4ch03'
-      }
-    };
-    wt(oracle, function (error, body){
-      body.should.be.equal("Please provide a valid email");
-    });
-  });
-  it('Valid Email', function() {
-    oracle.data.text = "+iesmite@gmail.com";
-    oracle.data.test_username = "iesmite";
-    oracle.data.test_email = "iesmite@gmail.com";
-    wt(oracle, function (error, body){
-      body.should.be.equal("Channel And User Created");
-    });  });
-});
-
-describe('Generic Errors', function() {
-  it('No token setted', function() {
-    oracle = {
-      data: {
-        "SLACK_COMMAND_TOKEN": "B",
-        "token": "B",
-        "user_id": "USERID",
-        "channel_name": "CHANNEL",
-        "channel_id": "TEST_CHANNEL_ID",
-        "SLACK_CHANNEL_NAME": "PEPITO",
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
         "text": "iesmite@gmail.com",
-        "test_username": "iesmite",
         "test_email": "iesmite@gmail.com",
-        "SLACK_DOMAIN": 'n4ch03'
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": true}
       }
     };
     wt(oracle, function (error, body){
-      body.should.be.equal("Sorry the token in you webhook isn't valid");
+      body.should.be.equal("User created and invited to the channel.");
     });
   });
-  it('No API TOKEN setted', function() {
-    oracle.data.SLACK_TOKEN = "A";
-    delete oracle.data.SLACK_COMMAND_TOKEN;
+  it('Wrong Command Security Token', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKE",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": true}
+      }
+    };
     wt(oracle, function (error, body){
-      body.should.be.equal("You need to provide the security token when deploy integration webtask");
+      body.should.be.equal("You need to provide the valid security token when deploy integration webtask.");
     });
   });
-  it('No POSTFIX setted', function() {
-    oracle.data.SLACK_COMMAND_TOKEN = "B";
-    delete oracle.data.SLACK_CHANNEL_NAME;
-    oracle.data.text = "+iesmite@gmail.com";
-    oracle.data.test_username = "iesmite";
-    oracle.data.test_email = "iesmite@gmail.com";
+  it('No Slack Domain Configured', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "result": {"ok": true}
+      }
+    };
     wt(oracle, function (error, body){
-      body.should.be.equal("Channel And User Created");
+      body.should.be.equal("Your command wasn't configured properly, please provide your slack domain in SLACK_DOMAIN to webtask.");
     });
   });
-  it('No SLACK_DOMAIN setted', function() {
-    delete oracle.data.SLACK_DOMAIN;
+  it('Action from directmessage', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "directmessage",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": true}
+      }
+    };
     wt(oracle, function (error, body){
-      body.should.be.equal("Your command wasn't configured properly, please provide your slack domain in SLACK_DOMAIN to webtask");
+      body.should.be.equal("You need to be in a public channel to invite an external user.");
+    });
+  });
+  it('Action from privategroup', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "privategroup",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": true}
+      }
+    };
+    wt(oracle, function (error, body){
+      body.should.be.equal("You need to be in a public channel to invite an external user.");
+    });
+  });
+  it('Slack API Token missing', function() {
+    oracle = {
+      data: {
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "channel",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": true}
+      }
+    };
+    wt(oracle, function (error, body){
+      body.should.be.equal("Sorry but the Slack API token in you webhook isn't valid.");
+    });
+  });
+  it('Already Invited User', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "channel",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": false, "error": "already_in_team"}
+      }
+    };
+    wt(oracle, function (error, body){
+      body.should.be.equal('The user iesmite@gmail.com was already invited. If the user didn\'t get the invite email please contact a Slack admin to resend the invite.');
+    });
+  });
+  it('Other API Error', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "channel",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": false, "error": "other_error"}
+      }
+    };
+    wt(oracle, function (error, body){
+      body.should.be.equal('There was an error: other_error');
     });
   });
 });

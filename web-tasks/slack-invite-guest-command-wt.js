@@ -13,7 +13,7 @@ module.exports =
         if (!result.ok) {
           return cb(null, result.message);
         }
-        return cb(null, "User created and invited to the channel.");
+        return cb(null, 'User created and invited to the channel.');
       })
       .catch(function(err) {
         return cb(err, null);
@@ -52,23 +52,23 @@ function preValidate(context) {
   var result = getEmptyResult();
   // validate the token sent by the command is the same that the one stored in the wt
   if (context.data.SLACK_COMMAND_TOKEN !==context.data.token) {
-    result.message = 'You need to provide the security token when deploy integration webtask.';
+    result.message = "You need to provide the valid security token when deploy integration webtask.";
     return result;
   // validate if the webtask defined correctly the slack domain
   } else if (context.data.SLACK_DOMAIN === undefined) {
-    result.message = 'Your command wasn\'t configured properly, please provide your slack domain in SLACK_DOMAIN to webtask.';
+    result.message = "Your command wasn't configured properly, please provide your slack domain in SLACK_DOMAIN to webtask.";
     return result;
   //validate if the command was triggered from a channel
   } else if (context.data.channel_name === 'directmessage' ||
       context.data.channel_name === 'privategroup') {
-    result.message = 'You need to be in a public channel to invite an external user.';
+    result.message = "You need to be in a public channel to invite an external user.";
     return result;
   //validate if a slack api token was privided
   } else if (context.data.SLACK_TOKEN === undefined) {
-    result.message = 'Sorry but the Slack API token in you webhook isn\'t valid.';
+    result.message = "Sorry but the Slack API token in you webhook isn't valid.";
     return result;
   } else if (!validator.isEmail(context.data.text)) {
-    result.message = 'Sorry your email isn\'t valid';
+    result.message = "Please provide a valid email";
     return result;
   }
   result.ok = true;
@@ -83,7 +83,7 @@ function preValidate(context) {
 function postValidate(json, mail) {
   var result = getEmptyResult();
   if (!json.ok) {
-    if (json.error === 'already_in_team') {
+    if (json.error === "already_in_team") {
       result.message = "The user " + mail + " was already invited. If the user didn't get the invite email please contact a Slack admin to resend the invite.";
     } else {
       result.message = "There was an error: " + json.error;
