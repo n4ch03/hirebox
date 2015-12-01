@@ -3,7 +3,7 @@
 
 ## Motivation
 
-In some scenarios for a hiring perspective is interesting to:
+In some scenarios is interesting to:
 * Invite an external user to our organization's [Slack](http://www.slack.com)
 * Add the external user to only one channel
 
@@ -18,20 +18,18 @@ Slack allows to create integrations to custom endpoints and that endpoints can b
 
 For the purpose of our solution we'll be using:
 * text from command
-* user id
 * channel name: that means the cannel where the command was typed
 
-The idea is to setup a integration that when you type a command **x** with parameter **y** the information is sent to a webtask. What is a valid **input?** an **email** or **email prefixed with +**
+The idea is to setup a integration that when you type a command **x** with parameter **y**, the information is sent to a webtask. Any valid email and not associated with an existent Slack team member is a valid input.
 
 ### Webtask rules
-* If input is prefixed with +
-  * Create a new channel with the user part of the mail plus a predefined fixed word
-  * Invite a user with the mail in the input
-  * Add the user to the created channel
-  * Add the user that triggered the action to the channel
-* otherwise
-  * Invite a user with the mail in the input
-  * Add the new user to the channel where action was triggered
+* Invite a user with the mail in the input
+* Add the new user to the channel where action was triggered
+* Control errors, some of them:
+  * User previously invited or part of team
+  * Invalid email
+  * Invalid Slack API Token, Command Token or Slack domain
+  * Command triggered from private groups or direct message   
 
 
 ## Installation
@@ -47,9 +45,8 @@ npm test
 
 Once repo is cloned execute:
 ```
-wt create web-tasks/slack-invite-guest-command-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=YOUR_SLACK_ORGANIZATION_DOMAIN
+wt create web-tasks/slack-invite-guest-command-wt.js --name  invite-guest --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=YOUR_SLACK_ORGANIZATION_DOMAIN
 ```
-The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 
 The token need for this integration is a token issued to an organization admin. To get that token, login as an administrator an go to https://api.slack.com/web .
 
@@ -59,5 +56,4 @@ The token need for this integration is a token issued to an organization admin. 
 That's all!! Just type your command and an email or your command and +email and the boring task of creating channels and invite externals users will not be there ;)
 
 ## TODO
-* Decide if kick out admin from new generated channel
 * Move to express and/or decide how to improve validations (middleware?)
