@@ -2,24 +2,25 @@
   "name": "hirebox",
   "version": "0.0.1",
   "description": "A slack integration that builds a sandbox to work with candidates",
-  "main": "web-tasks/slack-invite-guest-to-single-channel-wt.js",
+  "main": "web-tasks/slack-invite-guest-command-wt.js",
   "scripts": {
-    "test": "mocha web-tasks/slack-invite-guest-to-single-channel-wt-tests.js"
+    "test": "mocha web-tasks/slack-invite-guest-command-wt-tests.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/n4ch03/slack-invite-guest-to-single-channel.git"
+    "url": "https://github.com/n4ch03/slack-invite-guest-command-wt.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/n4ch03/slack-invite-guest-to-single-channel/issues"
+    "url": "https://github.com/n4ch03/slack-invite-guest-command-wt/issues"
   },
-  "homepage": "https://github.com/n4ch03/slack-invite-guest-to-single-channel",
+  "homepage": "https://github.com/n4ch03/slack-invite-guest-command-wt",
   "devDependencies": {
     "bluebird": "^3.0.5",
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
-    "mock-require": "^1.2.1"
+    "mock-require": "^1.2.1",
+    "validator": "^4.3.0"
   }
 }
