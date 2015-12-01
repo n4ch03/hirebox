@@ -84,6 +84,8 @@ function postValidate(json, mail) {
   var result = getEmptyResult();
   if (!json.ok) {
     if (json.error === "already_in_team") {
+      result.message = "The user " + mail + " is in the team.";
+    } else if (json.error === "already_invited") {
       result.message = "The user " + mail + " was already invited. If the user didn't get the invite email please contact a Slack admin to resend the invite.";
     } else {
       result.message = "There was an error: " + json.error;

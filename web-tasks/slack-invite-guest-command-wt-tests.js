@@ -142,11 +142,29 @@ describe('Invite External User', function() {
         "test_email": "iesmite@gmail.com",
         "channel_name": "channel",
         "SLACK_DOMAIN": 'n4ch03',
-        "result": {"ok": false, "error": "already_in_team"}
+        "result": {"ok": false, "error": "already_invited"}
       }
     };
     wt(oracle, function (error, body){
       body.should.be.equal('The user iesmite@gmail.com was already invited. If the user didn\'t get the invite email please contact a Slack admin to resend the invite.');
+    });
+  });
+  it('Already Member User', function() {
+    oracle = {
+      data: {
+        "SLACK_TOKEN": "API-TOKEN",
+        "SLACK_COMMAND_TOKEN": "COMMAND-TOKEN",
+        "token": "COMMAND-TOKEN",
+        "channel_id": "CHANNEL_TRIGGERED_ACTION",
+        "text": "iesmite@gmail.com",
+        "test_email": "iesmite@gmail.com",
+        "channel_name": "channel",
+        "SLACK_DOMAIN": 'n4ch03',
+        "result": {"ok": false, "error": "already_in_team"}
+      }
+    };
+    wt(oracle, function (error, body){
+      body.should.be.equal('The user iesmite@gmail.com is in the team.');
     });
   });
   it('Other API Error', function() {
