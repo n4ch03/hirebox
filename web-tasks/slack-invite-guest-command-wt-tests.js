@@ -26,7 +26,7 @@ mock('request-promise', function (options) {
 
 
 });
-var wt = require(__dirname + '/slack-invite-guest-to-single-channel-wt.js');
+var wt = require(__dirname + '/slack-invite-guest-command-wt.js');
 describe('Invite External User Without Channel Creation', function() {
   it('No @', function() {
     oracle = {

@@ -1,4 +1,4 @@
-# slack-invite-guest-to-single-channel: A slack integration that builds a sandbox to work with candidates.
+# slack-invite-guest-command: A slack integration that builds a sandbox to work with candidates.
 ![](https://api.travis-ci.org/n4ch03/hirebox.svg?branch=master)
 
 ## Motivation
@@ -47,7 +47,7 @@ npm test
 
 Once repo is cloned execute:
 ```
-wt create web-tasks/slack-invite-guest-to-single-channel-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=YOUR_SLACK_ORGANIZATION_DOMAIN
+wt create web-tasks/slack-invite-guest-command-wt.js --name  new-hire --secret SLACK_TOKEN=SLACK_API_TOKEN --secret SLACK_CHANNEL_NAME=POSTFIX_CHANNEL_NAME --secret SLACK_COMMAND_TOKEN=SECURITY_TOKEN --secret SLACK_DOMAIN=YOUR_SLACK_ORGANIZATION_DOMAIN
 ```
 The channels names will be **MAIL_USER-POSTFIX_CHANNEL_NAME**
 
